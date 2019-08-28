@@ -49,9 +49,9 @@ After performing the binomial test, VADT next performs a meta-analysis accross a
 
 Linke for Combine P-values Test: https://docs.scipy.org/doc/scipy-0.19.1/reference/generated/scipy.stats.combine_pvalues.html
 
-#### Part 4 B. Multi-dimensional p-value adjustment (Samples)
+#### Part 4 B. Multi-dimensional P-value Adjustment (Samples)
 
-After performing the binomial test, VADT next performs a multi-dimensional p-value adjustment on a per sample basis (Guo 2010) based on a user defined p-value cutoff. The multi-dimensional p-value adjustment tries to take into account adjusting the p-values of each sample based on both the x and y axis of the data. 
+After performing the binomial test, VADT next performs a multi-dimensional p-value adjustment on a per sample basis (Guo 2010) based on a user defined p-value cutoff. The multi-dimensional p-value adjustment tries to take into account the multi-diminesionality of the datasets by adjusting p-values in both the x & y direction of the data.
 
 It is important to point out VADT is not a black box program and all intermediate files are retained for the user to help the user better understand each step performed and also identify bugs in the program. No program is perfect and can always be improved!
 
@@ -152,10 +152,10 @@ Note: If a user cannot mask the reference genome, this value can be adjusted to 
 
 ## VADT Outputs
 
-VADT produces three major directories during the analysis process: Log_Directory, Meta_Analysis Results and Sample_FDR_Results. Each directory will now be broken down into each type of file produced during the analysis process.
+VADT produces a global output directory called "VADT_output_" that is date and time stamped. This is done to prevent a user from overwriting their prior result runs, which a good Computional Biologist has never done (cough cough)... Inside this global directory are three directories called: Filtering_Results, Meta_Analysis_Results and Multi_Dim_Adj_Results. Each directory will now further broken down.
 
 
-### Log_Directory
+### Filtering_Results
 
 The log directory consists of 4 files that show various steps of the filtering process of VCF file.
 
@@ -167,7 +167,7 @@ Note: Sample_Combo_Filter refers to the fact that variant had a combination of s
 
 `Identified_Indel_Regions.txt` - A txt file that contains all the identified indels in the dataset that are used to filter the remaining data.
 
-`Testable_Filtered_Variants.txt` - A txt file that contains all passing variants that can be further analyzed. It is important to point out the original VCF format in this file has been drastically filtered/changed from the original vcf , so that each sample record now consists of four features.
+`Testable_Informative_Filt_Variants.txt` - A txt file that contains all passing variants that can be further analyzed. It is important to point out the original VCF format in this file has been drastically filtered/changed from the original vcf , so that each sample record now consists of four features.
 
 Verdict: Genotype: Counts: Binomial_P_value
 
@@ -181,19 +181,17 @@ Binomial_P_value: P-value calculated from the binomial test of the raw counts.
 
 
 
-### Meta_Analysis_Results (11 Files)
+### Meta_Analysis_Results (10 Files)
 
-`Testable_Filtered_Variants.txt`  - Prior testable file copied to directory for record keeping/debugging purposes
-
-`summary_report.txt` - Summary report of the entire ASE analysis
+`Summary_Report_meta_analysis.txt` - Summary report of the entire ASE analysis
 
 `data_for_ref_allele_bias_plotting.txt` - Counts for all testable variants, so overall reference allele bias can be investigated on a per variant basis or globally
 
 `variant_meta_analysis_results.txt` - All meta-analysis results from the testable variants including the FDR corrected p-value and if the value is significant (user input parameter). 
 
-`sig_meta_fdr_corrected_variants.txt` - All variants considered statistically significant from the meta-analysis
+`sig_meta_analysis_variants.txt` - All variants considered statistically significant from the meta-analysis
 
-`not_sig_meta_fdr_corrected_variants.txt` - All variants not considered statistically significant from the meta-analysis
+`not_sig_meta_analysis_variants.txt` - All variants not considered statistically significant from the meta-analysis
 
 `sig_samples_report.txt` - Tallying report of samples results from the sig_meta_fdr_corrected_variants.txt file
 
@@ -206,9 +204,9 @@ Binomial_P_value: P-value calculated from the binomial test of the raw counts.
 `sig_variants_report_and_meta_results.txt` - merged results from sig_variants_report.txt and variant_meta_analysis.results.txt
 
 
-### Sample_FDR_Results (9 Files)
+### Multi_Dim_Adj_Results (9 Files)
 
-`summary_report.txt` - Summary report of the entire ASE analysis
+`Summary_report.txt` - Summary report of the entire ASE analysis
 
 `data_for_ref_allele_bias_plotting.txt` - Counts for all testable variants, so overall reference allele bias can be investigated on a per variant basis or globally
 
