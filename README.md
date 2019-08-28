@@ -204,17 +204,20 @@ Binomial_P_value: P-value calculated from the binomial test of the raw counts.
 `sig_variants_report_and_meta_results.txt` - merged results from sig_variants_report.txt and variant_meta_analysis.results.txt
 
 
+                                     FIX HERE!!!!!!!!!!!!!!!!!
+
+
 ### Multi_Dim_Adj_Results (9 Files)
 
-`Summary_report.txt` - Summary report of the entire ASE analysis
+`Summary_Report_multi_dimensiona_pvalue_adj.txt` - Summary report of the entire ASE analysis
 
 `data_for_ref_allele_bias_plotting.txt` - Counts for all testable variants, so overall reference allele bias can be investigated on a per variant basis or globally
 
-`sample_fdr_corrected_variants.txt` - File consists of all the testable variants (Testable_Filtered_Variants.txt), but now the sample record contains a fifth value of a fdr corrected p-value (q-value). 
+`multi_dim_adj_pvalues_testable.txt` - File consists of all the testable samples with a new entry in the sample column on whether that sample passed the cutoff for that specific variant. The cutoff p-value calculated from the multi-dimensional p-value algorithm can be found in the variants format column (last entry) 
 
-`sig_sample_fdr_corrected_variants.txt` - All variants with atleast one sample with a significant fdr corrected p-value
+`sig_multi_dim_adj_results.txt` - All variants with atleast one sample with a significant sample
 
-`not_sig_sample_fdr_corrected_variants.txt` - All variants that failed the fdr correction cutoff p-value
+`not_sig_multi_dim_adj_results.txt` - All variants that failed and did not contain one significant sample
 
 `sig_samples_report.txt` - Tallying report of samples results from the sig_sample_fdr_corrected_variants.txt file
 
@@ -223,6 +226,15 @@ Binomial_P_value: P-value calculated from the binomial test of the raw counts.
 `maf_freq_binning_one_ase_hit.txt` - Frequency binning based minor allele frequency (maf) of all variants with atleast one ASE significant hit
 
 `ase_freq_prevalence_among_samples.txt` - Frequency binning of ASE prevalance among all samples to see the overall occurrence of ASE among the samples
+
+
+
+
+
+
+
+
+
 
 
 ### References
