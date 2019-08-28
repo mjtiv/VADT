@@ -43,15 +43,15 @@ Link for Binomial Test: https://docs.scipy.org/doc/scipy-0.14.0/reference/genera
 
 VADT performs two different types of statistical analysis of the data (varying models) to identify significant ASE results, a meta analysis or a per sample analysis of the data. Both tests give similiar results, but adress the question of identifying statisically significant ASE variants in slighly different ways and it is up to the user to choose which model is best for their dataset. An explanation of how each test is specifically performed is explained below.
 
-#### Part 4 A. Meta-Analysis
+#### Part 4 A. Meta-Analysis (Variants)
 
 After performing the binomial test, VADT next performs a meta-analysis accross all tested samples per variant using Fisher's Method (Fisher 1958) to combine p-values. After getting the final p-value from the meta-analysis an FDR (Benjamini-Hochberg 1995) correction is performed on the data and the significant variants (q-value cutoff defined by user) reported. 
 
 Linke for Combine P-values Test: https://docs.scipy.org/doc/scipy-0.19.1/reference/generated/scipy.stats.combine_pvalues.html
 
-#### Part 4 B. Sample Level Analysis
+#### Part 4 B. Multi-dimensional p-value adjustment (Samples)
 
-After performing the binomial test, VADT next performs an FDR (Benjamini-Hochberg 1995) correction on a per-sample basis and the significant variants (q-value cutoff defined by user) reported.
+After performing the binomial test, VADT next performs a multi-dimensional p-value adjustment on a per sample basis (Guo 2010) based on a user defined p-value cutoff. The multi-dimensional p-value adjustment tries to take into account adjusting the p-values of each sample based on both the x and y axis of the data. 
 
 It is important to point out VADT is not a black box program and all intermediate files are retained for the user to help the user better understand each step performed and also identify bugs in the program. No program is perfect and can always be improved!
 
@@ -78,6 +78,10 @@ Note: VCF files utilized by VADT were produced by GATK's Haplotypecaller and so 
 * from scipy.stats import combine_pvalues
 * import numpy
 * import copy
+* from datetime import datetime
+* from platform import python_version
+
+Note: Only modules that need to be installed using "pip" or whl files are NumPy and SciPy
 
 
 ## Running the Program
@@ -96,9 +100,9 @@ python VADT_"version" \
 --Indel_Exclusion_Region_Length 75 \
 --Quality_Score_Minimum_for_Variants 20 \
 --Minimum_Read_Counts 20 \
---META_FDR_p_value 0.05 \
---META_binomial_p_value 0.05 \
---FDR_Sample_p_value 0.05 \
+--Meta_BH_adj_p_value_cutoff 0.05 \
+--Meta_sample_p_value_cutoff 0.05 \
+--Multi_Dim_adjust_pvalue_cutoff 0.05 \
 --Binomial_Probability_Value 0.5
 </pre>
  
@@ -131,13 +135,13 @@ Sample Level Filtering
 
 Meta-Analysis Cutoff Values
 
-`--META_FDR_p_value` 0.05 (Default = 0.05) Q-value cutoff for considering a FDR corrected variant significant
+`-Meta_BH_adj_p_value_cutoff` 0.05 (Default = 0.05) P-value cutoff for considering an adjusted p-value significant
 
-`--META_binomial_p_value` 0.05 (Default = 0.05) P-value cutoff for considering a sample statistically significant for final tallying of results after initially identifying a variant statistically significant based on its FDR q-value. 
+`--Meta_sample_p_value_cutoff` 0.05 (Default = 0.05) P-value cutoff for estimating the total tally of statistically significant samples statistically significant variants identified from the meta-analysis. 
 
-FDR Sample Correction Only
+Multi-Dimensional P-Value Adjustment (Samples)
 
-`--FDR_Sample_p_value`  (Default = 0.05) FDR corrected p-value cutoff (q-value) for a sample after correcting its initial p-value determined from the binomial test.
+`--Multi_Dim_adjust_pvalue_cutoff`  (Default = 0.05) P-value cutoff utilized throughout the multi-dimensional p-value adjustment algorithm.
 
 Optional Binomial Test Probability Value
 
@@ -228,6 +232,8 @@ Binomial_P_value: P-value calculated from the binomial test of the raw counts.
 Benjamini, Y. and Y. Hochberg, Controlling the false discovery rate: a pratical and powerful approach to multiple testing. Journal of the Royal Statistical Society, 1995. 57(1): p. 289-300
 
 Fisher, R., Statistical Methods for Research Workers (Thirteenth Edition-Revised). 1958, New York: Hafner Publishing Company Inc.
+
+Guo, W., S.K. Sarkar, and S.D. Peddada, Controlling false discoveries in multidimensional directional decisions, with applications to gene expression data on ordered categories. Biometrics, 2010. 66(2): p. 485-92.
 
 
 
