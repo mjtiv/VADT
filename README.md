@@ -35,24 +35,25 @@ A concern with detection of ASE variants is reference allele bias where the refe
 
 ### Part 3. Binomial Test
 
-VADT performs a binomial test on all testable biallelic samples in the dataset using SciPy's binomial test module. Utilizing the raw read counts from the VCF file. 
+VADT performs a binomial test on all informative "testable" biallelic samples in the dataset using SciPy's binomial test module. Utilizing the raw read counts from the VCF file. 
 
 Link for Binomial Test: https://docs.scipy.org/doc/scipy-0.14.0/reference/generated/scipy.stats.binom_test.html
 
 ### Part 4 Statistical Analysis of Binomial Results
 
-VADT performs two different types of statistical analysis of the data (varying models) to identify significant ASE results, a meta analysis or a per sample analysis of the data. Both tests give similiar results, but adress the question of identifying statisically significant ASE variants in slighly different ways and it is up to the user to choose which model is best for their dataset. An explanation of how each test is specifically performed is explained below.
+VADT performs two different types of statistical analysis of the data (varying models) to identify significant ASE results, a meta-analysis (variants) or multi-dimensional p-value adjustment (samples). Each test is examining the data in a different way either to identify significant variants or significant samples.
 
 #### Part 4 A. Meta-Analysis (Variants)
 
-After performing the binomial test, VADT next performs a meta-analysis accross all tested samples per variant using Fisher's Method (Fisher 1958) to combine p-values. After getting the final p-value from the meta-analysis an FDR (Benjamini-Hochberg 1995) correction is performed on the data and the significant variants (q-value cutoff defined by user) reported. 
+After implementing the binomial test, VADT next performs a meta-analysis accross all tested samples on per variant basis using Fisher's Method (Fisher 1958). The underlying idea of Fisher's meta-analysis is that by combining p-values together significance may be indentified from the aggregation of samples. After getting the final p-value from the meta-analysis an FDR (Benjamini-Hochberg 1995) is implemented on the final meta p-values. The cutoff for significance of the adjusted p-values is determined by the user in the parameter file. 
 
 Linke for Combine P-values Test: https://docs.scipy.org/doc/scipy-0.19.1/reference/generated/scipy.stats.combine_pvalues.html
 
 #### Part 4 B. Multi-dimensional P-value Adjustment (Samples)
 
-After performing the binomial test, VADT next performs a multi-dimensional p-value adjustment on a per sample basis (Guo 2010) based on a user defined p-value cutoff. The multi-dimensional p-value adjustment tries to take into account the multi-diminesionality of the datasets by adjusting p-values in both the x & y direction of the data.
+After performing the binomial test, VADT next performs a multi-dimensional p-value adjustment on a per sample basis (Guo 2010) based on a user defined p-value cutoff that gets implemented at the various stages of multi-dimensional adjustment. The multi-dimensional p-value adjustment tries to take into account the multi-diminesionality of the datasets by adjusting p-values in both the x & y direction of the data.
 
+#### Note to Users
 It is important to point out VADT is not a black box program and all intermediate files are retained for the user to help the user better understand each step performed and also identify bugs in the program. No program is perfect and can always be improved!
 
 
@@ -180,7 +181,6 @@ Counts: Raw counts of the reference and alternative allele
 Binomial_P_value: P-value calculated from the binomial test of the raw counts.
 
 
-
 ### Meta_Analysis_Results (10 Files)
 
 `Summary_Report_meta_analysis.txt` - Summary report of the entire ASE analysis
@@ -193,9 +193,9 @@ Binomial_P_value: P-value calculated from the binomial test of the raw counts.
 
 `not_sig_meta_analysis_variants.txt` - All variants not considered statistically significant from the meta-analysis
 
-`sig_samples_report.txt` - Tallying report of samples results from the sig_meta_fdr_corrected_variants.txt file
+`sig_samples_report.txt` - Tallying report of samples results from the sig_meta_analysis_variants.txt file
 
-`sig_variants_report.txt` - Tallying report of variants results from the sig_meta_fdr_corrected_variants.txt file
+`sig_variants_report.txt` - Tallying report of variants results from the sig_meta_analysis_variants.txt file
 
 `maf_freq_binning_one_ase_hit.txt` - Frequency binning based minor allele frequency (maf) of all variants with atleast one ASE significant hit
 
@@ -204,37 +204,25 @@ Binomial_P_value: P-value calculated from the binomial test of the raw counts.
 `sig_variants_report_and_meta_results.txt` - merged results from sig_variants_report.txt and variant_meta_analysis.results.txt
 
 
-                                     FIX HERE!!!!!!!!!!!!!!!!!
-
-
 ### Multi_Dim_Adj_Results (9 Files)
 
 `Summary_Report_multi_dimensiona_pvalue_adj.txt` - Summary report of the entire ASE analysis
 
 `data_for_ref_allele_bias_plotting.txt` - Counts for all testable variants, so overall reference allele bias can be investigated on a per variant basis or globally
 
-`multi_dim_adj_pvalues_testable.txt` - File consists of all the testable samples with a new entry in the sample column on whether that sample passed the cutoff for that specific variant. The cutoff p-value calculated from the multi-dimensional p-value algorithm can be found in the variants format column (last entry) 
+`multi_dim_adj_pvalues_testable.txt` - File consists of all the informative "testable" samples with a new entry in the sample column on whether that sample passed the cutoff for that specific variant. The cutoff p-value for each variant calcualted from the multi-dimensional p-value algorithm can be found in the variants format column (last entry). It is important to note each variant will have a different cutoff p-value. 
 
-`sig_multi_dim_adj_results.txt` - All variants with atleast one sample with a significant sample
+`sig_multi_dim_adj_results.txt` - All variants with atleast one sample identified as significant
 
 `not_sig_multi_dim_adj_results.txt` - All variants that failed and did not contain one significant sample
 
-`sig_samples_report.txt` - Tallying report of samples results from the sig_sample_fdr_corrected_variants.txt file
+`sig_samples_report.txt` - Tallying report of samples results from the sig_multi_dim_adj_results.txt file
 
-`sig_variants_report.txt` - Tallying report of variants results from the sig_sample_fdr_corrected_variants.txt file
+`sig_variants_report.txt` - Tallying report of variants results from the sig_multi_dim_adj_results.txt file
 
 `maf_freq_binning_one_ase_hit.txt` - Frequency binning based minor allele frequency (maf) of all variants with atleast one ASE significant hit
 
 `ase_freq_prevalence_among_samples.txt` - Frequency binning of ASE prevalance among all samples to see the overall occurrence of ASE among the samples
-
-
-
-
-
-
-
-
-
 
 
 ### References
