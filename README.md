@@ -12,7 +12,7 @@
 Program takes in a raw VCF file, filters the data and then performs various statistical analysis for
 detection of allele specific expression (ASE) to identify highly confident occurrences of ASE.
 
-Code was developed in the Abasht Laboratory at the University of Delaware under the supervision of [Dr. Behnam Abasht](http://canr.udel.edu/faculty/behnam-abasht/).
+Overall program was originally developed in the Abasht Laboratory at the University of Delaware under the supervision of [Dr. Behnam Abasht](http://canr.udel.edu/faculty/behnam-abasht/). The statistical models and overall accuracy of their code development was overseen by [Dr. Jing Qiu](https://canr.udel.edu/faculty/jing-qiu/)
 
 Please contact Dr. Behnam Abasht (abasht@udel.edu) with any questions or concerns. 
 
@@ -208,7 +208,7 @@ Binomial_P_value: P-value calculated from the binomial test of the raw counts.
 
 `Summary_Report_multi_dimensiona_pvalue_adj.txt` - Summary report of the entire ASE analysis
 
-`data_for_ref_allele_bias_plotting.txt` - Counts for all testable variants, so overall reference allele bias can be investigated on a per variant basis or globally
+`data_for_ref_allele_bias_plotting.txt` - Counts for all the informative "testable" variants, so overall reference allele bias can be investigated on a per variant basis or globally
 
 `multi_dim_adj_pvalues_testable.txt` - File consists of all the informative "testable" samples with a new entry in the sample column on whether that sample passed the cutoff for that specific variant. The cutoff p-value for each variant calcualted from the multi-dimensional p-value algorithm can be found in the variants format column (last entry). It is important to note each variant will have a different cutoff p-value. 
 
@@ -223,6 +223,7 @@ Binomial_P_value: P-value calculated from the binomial test of the raw counts.
 `maf_freq_binning_one_ase_hit.txt` - Frequency binning based minor allele frequency (maf) of all variants with atleast one ASE significant hit
 
 `ase_freq_prevalence_among_samples.txt` - Frequency binning of ASE prevalance among all samples to see the overall occurrence of ASE among the samples
+
 
 
 ### References
