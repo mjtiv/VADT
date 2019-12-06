@@ -9,7 +9,7 @@ Name of File Being Analyzed (give full pathway)
 --File_Name test_data.txt
 
 Output Location of Data (give full pathway)
---Output_File_Location D:\Dropbox\Abasht_Lab_Folder_Joe_Tomlinson\ASE_PROJECT_EVERYTHING\VADT_Versions_Building\7-17-2019_Updating_Combing_Parts_Combing_Back_Together
+--Output_File_Location C:\Your\Output\Location
 
 		Variant Level Filtering
 --Indel_Exclusion_Region_Length 75
