@@ -1,7 +1,7 @@
 # VADT (VCF ASE Detection Tool)
 
 
-**Author**: M. Joseph Tomlinson IV  
+**Author**: M. Joseph Tomlinson IV and Behnam Abasht  
 **Last Update**: Aug 28, 2019 
 **Creation Data**: May 27, 2018  
 
