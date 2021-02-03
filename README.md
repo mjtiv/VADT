@@ -2,7 +2,7 @@
 
 
 **Author**: M. Joseph Tomlinson IV and Behnam Abasht  
-**Last Update**: Aug 28, 2019 
+**Last Update**: Feb 02, 2021 
 **Creation Data**: May 27, 2018  
 
 ### Currently the program is in beta-phase and a manuscript drafted for submission. Please feel free to use, but please cite the github for the time period until it is published. 
