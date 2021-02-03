@@ -2946,6 +2946,116 @@ def tally_final_meta_results(sig_meta_file_name, meta_global_counts_dict, meta_s
 # ASE among variants
 
 
+def create_sample_tallying_dict(samples_list):
+
+    """
+
+    Creats a tallying dictionary for the samples used ONLY
+    for "testable" variants global file
+
+    : Param samples_list: List of the samples
+
+    : Return tallying_dict: Empty dictionary to store
+        all the values
+
+    """
+
+    # Create dictionary
+    tallying_dict = {}
+
+    # Loop over the samples list
+    for sample in samples_list:
+
+        # Add entry to dictionary
+        tallying_dict.update({sample: {'total_count': 0, 'testable_biallelic': 0}})
+
+    return(tallying_dict)
+
+
+def count_sample_biallelic_testable(input_file_name):
+
+
+    """
+
+    Counts the number of biallelic testable variants for
+    a sample.
+
+    : Param input_file_name: Name of the file being parsed
+
+    : Return testable_samples_counters_dict: Dictionary 
+
+
+    """
+
+    # Open the file
+    input_file = open(input_file_name, 'r')
+
+    # Starting looping over lines of the file
+    for line in input_file:
+
+        # Remove the new line for safety
+        line = line.rstrip("\n")
+
+        # Getting the header information from the file (sample names)
+        if line.startswith('#CHROM'):
+            
+            # Splitting the data
+            parsed_line = line.rstrip().split('\t')
+
+            # Getting Variant Header
+            variant_header = parsed_line[:8]
+            variant_header = ('\t'.join(map(str,variant_header)))
+
+            # Retrieve_Sample_Names_for_Logging
+            samples_list = parsed_line[9:]
+            numb_individuals = len(samples_list)
+
+            #Create a tallying dictionary for results
+            testable_samples_counters_dict = create_sample_tallying_dict(samples_list)
+
+        # Start Examing the Samples
+        else:
+            
+            # Splitting the data
+            parsed_line = line.rstrip().split('\t')
+
+            # Getting Variant Header
+            variant_header = parsed_line[:8]
+            variant_header = ('\t'.join(map(str,variant_header)))
+
+            # Retrieve sample calls
+            sample_allelic_results_calls = parsed_line[9:]
+
+            # Sample index counter
+            sample_index_counter = 0
+
+            # Loop over the samples
+            for sample_call in sample_allelic_results_calls:
+
+                # Get Sample ID
+                sample_id = samples_list[sample_index_counter]
+
+                # Add to the dictionary counter
+                testable_samples_counters_dict[sample_id]['total_count'] +=1
+
+                # Get the Biallelic passing variants
+                if sample_call.startswith('Biallelic'):
+                    testable_samples_counters_dict[sample_id]['testable_biallelic'] +=1
+
+                # Skip over the rest of the sample variant verdicts
+                # Possible options: No_Data, Homo_Low_Count, Homo, Low_Read_Count, Low_Allele_Count
+                else:
+                    pass
+                    
+                # Add to the counter
+                sample_index_counter +=1
+
+    # Close the file
+    input_file.close()
+   
+    return(testable_samples_counters_dict)
+
+
 def create_sample_tallying_counters(samples_list):
     
     """
@@ -2979,9 +3089,10 @@ def create_sample_tallying_counters(samples_list):
     return(samples_counters_dict)
 
 
-def printing_sample_results(folder_pathway, samples_list, samples_counters_dict):
+def printing_sample_results(folder_pathway, samples_list, samples_counters_dict, testable_file_biallelic_samples_dict):
     
     """
+
     Prints a new file of sample tally reports for ASE
     
     : Param folder_pathway: Pathway of where to put the data after tallying
@@ -2994,7 +3105,7 @@ def printing_sample_results(folder_pathway, samples_list, samples_counters_dict)
     
     samples_report_file = open(folder_pathway + "/sig_samples_report.txt", "w")
 
-    samples_report_file.write("Sample\tBiallelic_Testable\tBiallelic_No_ASE\tSig_ASE\t\tSig_ASE_Ref\tSig_ASE_Alt\t"
+    samples_report_file.write("Sample\tTestableFile_Biallelic_Testable\t\tSigResultsFile_Biallelic_Testable\tBiallelic_No_ASE\tSig_ASE\t\tSig_ASE_Ref\tSig_ASE_Alt\t"
                              "\tHomo_Passing\t\tHomo_Ref\tHomo_Alt\t\tNon-Testable\n")
 
     for sample in samples_list:
@@ -3007,8 +3118,14 @@ def printing_sample_results(folder_pathway, samples_list, samples_counters_dict)
         passing_homozygous_ref = str(samples_counters_dict[sample]['Passing_Homozygous_Ref'])
         passing_homozygous_alt = str(samples_counters_dict[sample]['Passing_Homozygous_Alt'])
         non_testable = str(samples_counters_dict[sample]['Non_Testable'])
+
+        # Get the global testable count from the testable file not just from the significant file
+        testablefile_biallelic_testable = str(testable_file_biallelic_samples_dict[sample]['testable_biallelic'])
  
-        samples_report_file.write(str(sample) + "\t" + biallelic_testable + "\t" + biallelic_no_ase + "\t"
+        samples_report_file.write(str(sample) + "\t"
+                                  + testablefile_biallelic_testable + "\t\t"
+                                  + biallelic_testable + "\t"
+                                  + biallelic_no_ase + "\t"
                                   + sig_ase + "\t"
                                   + "ASE Breakdown:" + "\t"
                                   + sig_ase_ref + "\t" + sig_ase_alt + "\t\t" 
@@ -3707,6 +3824,9 @@ def main():
     # Renaming filtered RNA-Seq File
     testable_variants_file =filtered_rna_seq_file_name
 
+    # Getting a Sample Tally of all testable biallelic counts (individual sample counts)
+    testable_file_biallelic_samples_dict = count_sample_biallelic_testable(testable_variants_file)
+
     ###############################################################################
     ################ Multidimensional P-value Adjustment Code #####################
     ###############################################################################
@@ -3770,7 +3890,7 @@ def main():
     tally_multi_dim_global_dictionary =  tally_final_multi_dim[5]
     
     #Printing all the final results to various report files
-    printing_sample_results(multi_dim_sample_output_dir, multi_dim_samples_list, multi_dim_samples_counters_dict)
+    printing_sample_results(multi_dim_sample_output_dir, multi_dim_samples_list, multi_dim_samples_counters_dict, testable_file_biallelic_samples_dict)
 
     sig_variants_multi_dim_final_file_name = printing_variant_results(multi_dim_sample_output_dir, multi_dim_variant_list,
                                                                       multi_dim_variant_results_dictionary, multi_dim_variant_header)
@@ -3842,7 +3962,7 @@ def main():
     tally_meta_global_dictionary = tally_final_meta_analysis[5] 
 
     #Printing all the final results to various report files
-    printing_sample_results(meta_analysis_output_folder, meta_samples_list, meta_samples_counters_dict)
+    printing_sample_results(meta_analysis_output_folder, meta_samples_list, meta_samples_counters_dict, testable_file_biallelic_samples_dict)
 
     sig_variants_meta_final_file_name = printing_variant_results(meta_analysis_output_folder, meta_variant_list,
                                                                  meta_variant_results_dictionary, meta_variant_header)
@@ -3907,6 +4027,8 @@ if __name__ == "__main__":
 
 
 ##################################### Version Control #############################
+# VADT_beta_3.0.1.py
+# - Updated sample counts to have a tally of all biallelic testable samples based on the testable variants file
 #
 # VADT_beta_3.0.0.py 
 # - Removed the Sample FDR method and replaced with the Multi_Dimensional p-value adjustment (BIG overhall)
@@ -3919,16 +4041,6 @@ if __name__ == "__main__":
 # -Update Meta P-values BH method now
 #
 #VADT_beta_2.0.2.py Original Version Worked Very Well and Stable
-
-
-
-
-
-
-
-
-
-
 
 
 
