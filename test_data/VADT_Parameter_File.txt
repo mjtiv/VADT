@@ -1,0 +1,61 @@
+#####################################################
+#####################################################
+				VADT PARAMETER FILE
+#####################################################
+#####################################################
+  ALL variables are space seperated from input key	
+
+Name of File Being Analyzed (give full pathway)
+--File_Name test_data.vcf
+
+Output Location of Data (give full pathway)
+--Output_File_Location Your/Output_Location/Test_Case_Online
+
+		Variant Level Filtering
+--Indel_Exclusion_Region_Length 75
+--Quality_Score_Minimum_for_Variants 20
+
+		Sample Level Filtering
+Filtering on a Per Sample Basis for Each Variant
+--Minimum_Read_Counts 20
+
+#####################################################
+			Meta-Analysis Cutoff Values
+
+Performs overall analysis of ASE taking into account the
+behavior of all samples that have hetereozygous alleles
+using Fisher's combined probability test.
+
+Meta-Analysis BH Adjusted P-value for Significance
+--Meta_BH_adj_p_value_cutoff 0.05
+
+P-value Cutoff for an Estimated Tallying of Samples
+--Meta_sample_p_value_cutoff 0.05
+
+IMPORTANT the "meta estimated sample p-value cutoff" is for
+a estimation of significant samples found using the
+meta-analysis technique. For a more accurate sample count
+see the below technique.
+
+#####################################################
+	Multi-Dimensional P-Value Adjustment (Samples)
+
+Determining overall sample significance after properly
+adjusting for multi-dimensionality of the data
+
+Multi-Dimensional Pvalue Cutoff for Test
+--Multi_Dim_adjust_pvalue_cutoff 0.05
+
+#####################################################
+		Optional Binomial Test Probability Value
+
+If correcting for reference allele bias is desired the
+binomial probability value can be changed from 50/50 to
+any value between 0 and 1.	
+--Binomial_Probability_Value 0.5
+
+
+			End of Parameter File
+#####################################################
+#####################################################
+
