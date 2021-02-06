@@ -11,6 +11,8 @@ AUTHOR: M. Joseph Tomlinson IV
 
 Program Originally Created: 5-23-2018
 
+Last Updated: 2-05-2021
+
 """
 
 # Required Modules
@@ -3229,7 +3231,7 @@ def printing_variant_results(folder_pathway, variant_list, variant_results_dicti
     
     variants_report_file = open(sig_variants_final_output_file_name, "w")
 
-    variants_report_file.write(variant_header+ "\tMAF\tBiallelic_Testable\tBiallelic_No_ASE\tSig_ASE\t\tSig_ASE_Ref\tSig_ASE_Alt\t"
+    variants_report_file.write(variant_header+ "\tAlt_Allele_Freq\tBiallelic_Testable\tBiallelic_No_ASE\tSig_ASE\t\tSig_ASE_Ref\tSig_ASE_Alt\t"
                              "\tHomo_Passing\t\tHomo_Ref\tHomo_Alt\t\tNon-Testable\n")
 
     # Sample Prevalance of ASE Dictionary
@@ -3285,7 +3287,8 @@ def printing_variant_results(folder_pathway, variant_list, variant_results_dicti
         # Total Counts
         total_count = reference_count + alternative_count                    
 
-        # Getting the minor allele frequency from the counts                   
+        # Getting the minor allele frequency from the counts
+        # NOTE: MAF variable name is confusing SHOULD HAVE BEEN- alt_allele_freq
         MAF = str(round((alternative_count / total_count),2))
 
         ################################################################
@@ -3322,8 +3325,8 @@ def printing_variant_results(folder_pathway, variant_list, variant_results_dicti
                                                           prevalance_study_file_name, prev_study_descript)
     
     #Printing Overall frequencying of a variant identified with ASE
-    freq_study_descript = 'Binning of Overall Variant MAF which Has At Least One ASE Hit'
-    freq_study_file_name = 'maf_freq_binning_one_ase_hit'
+    freq_study_descript = 'Binning of Overall Variant alternative allele frequency which Has At Least One ASE Hit'
+    freq_study_file_name = 'alt_allele_freq_binning_one_ase_hit'
     print_sig_var_freq = printing_frequency_dictionary(folder_pathway, ase_variant_freq_bin_dict,
                                                           freq_study_file_name, freq_study_descript)
 
@@ -4027,6 +4030,9 @@ if __name__ == "__main__":
 
 
 ##################################### Version Control #############################
+# VADT_beta_3.0.2.py
+# - Fixing MAF label in Meta analysis--- proper term is Alt_Allele_Freq NOT MAF (confusing for either major or minor)
+#
 # VADT_beta_3.0.1.py
 # - Updated sample counts to have a tally of all biallelic testable samples based on the testable variants file
 #
@@ -4041,6 +4047,16 @@ if __name__ == "__main__":
 # -Update Meta P-values BH method now
 #
 #VADT_beta_2.0.2.py Original Version Worked Very Well and Stable
+
+
+
+
+
+
+
+
+
+
 
 
 
