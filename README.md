@@ -197,7 +197,7 @@ Binomial_P_value: P-value calculated from the binomial test of the raw counts.
 
 `sig_variants_report.txt` - Tallying report of variants results from the sig_meta_analysis_variants.txt file
 
-`maf_freq_binning_one_ase_hit.txt` - Frequency binning based minor allele frequency (maf) of all variants with atleast one ASE significant hit
+`alt_allele_freq_binning_one_ase_hit.txt` - Frequency binning based alternative allele frequency of all variants with atleast one ASE significant hit
 
 `ase_freq_prevalence_among_samples.txt` - Frequency binning of ASE prevalance among all samples to see the overall occurrence of ASE among the samples
 
