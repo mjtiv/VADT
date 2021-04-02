@@ -5,7 +5,7 @@
 **Last Update**: Feb 02, 2021 
 **Creation Data**: May 27, 2018  
 
-### Currently the program is in beta-phase and a manuscript drafted for submission. Please feel free to use, but please cite the github for the time period until it is published. 
+### Please cite the following paper https://www.nature.com/articles/s41598-021-83459-8 if you use VADT in your research work.
 
 ## Program Description
 
