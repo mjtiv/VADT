@@ -5,7 +5,7 @@
 **Last Update**: Feb 02, 2021 
 **Creation Data**: May 27, 2018  
 
-If you use VADT in your research work please cite the following paper https://www.nature.com/articles/s41598-021-83459-8.
+Please cite the following paper https://www.nature.com/articles/s41598-021-83459-8 when using VADT in your research work. 
 
 ## Program Description
 
